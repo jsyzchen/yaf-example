@@ -3,53 +3,27 @@
  * github: https://github.com/luofei614/SocketLog
  * @author luofei614<weibo.com/luofei614>
  */
-function slog($log,$type='log',$css='')
-{
-    if(is_string($type))
-    {
-        $type=preg_replace_callback('/_([a-zA-Z])/',create_function('$matches', 'return strtoupper($matches[1]);'),$type);
-        if(method_exists('SocketLog',$type) || in_array($type,SocketLog::$log_types))
-        {
-           return  call_user_func(array('SocketLog',$type),$log,$css);
-        }
-    }
-
-    if(is_object($type) && 'mysqli'==get_class($type))
-    {
-           return SocketLog::mysqlilog($log,$type);
-    }
-
-    if(is_resource($type) && ('mysql link'==get_resource_type($type) || 'mysql link persistent'==get_resource_type($type)))
-    {
-           return SocketLog::mysqllog($log,$type);
-    }
-
-
-    if(is_object($type) && 'PDO'==get_class($type))
-    {
-           return SocketLog::pdolog($log,$type);
-    }
-
-    throw new Exception($type.' is not SocketLog method');
-}
-
-class SocketLog
+namespace think\org;
+class Slog
 {
     public static $start_time=0;
     public static $start_memory=0;
     public static $port=1116;//SocketLog 服务的http的端口号
     public static $log_types=array('log','info','error','warn','table','group','groupCollapsed','groupEnd','alert');
+    
+    protected static $_allowForceClientIds = array();    //配置强制推送且被授权的client_id
 
     protected static $_instance;
 
     protected static $config=array(
+        'enable'=>true, //是否记录日志的开关
         'host'=>'localhost',
         //是否显示利于优化的参数，如果允许时间，消耗内存等
         'optimize'=>false,
         'show_included_files'=>false,
         'error_handler'=>false,
         //日志强制记录到配置的client_id
-        'force_client_id'=>'',
+        'force_client_ids'=>array(),
         //限制允许读取日志的client_id
         'allow_client_ids'=>array()
     );
@@ -72,12 +46,35 @@ class SocketLog
         }
     }
 
+   public static function sql($sql,$link)
+    {
+        if(is_object($link) && 'mysqli'==get_class($link))
+        {
+               return self::mysqlilog($sql,$link);
+        }
+
+        if(is_resource($link) && ('mysql link'==get_resource_type($link) || 'mysql link persistent'==get_resource_type($link)))
+        {
+               return self::mysqllog($sql,$link);
+        }
+
+
+        if(is_object($link) && 'PDO'==get_class($link))
+        {
+               return self::pdolog($sql,$link);
+        }
+
+        throw new Exception('SocketLog can not support this database link');
+    }    
+
+
+
     public static function big($log)
     {
             self::log($log,'font-size:20px;color:red;');
     }
 
-    public static function trace($msg,$trace_level=2,$css='')
+    public static function trace($msg,$trace_level=1,$css='')
     {
         if(!self::check())
         {
@@ -159,7 +156,7 @@ class SocketLog
                 $obj=$pdo->query( "EXPLAIN ".$sql);
                 if(is_object($obj) && method_exists($obj,'fetch'))
                 {
-                    $arr=$obj->fetch(PDO::FETCH_ASSOC);
+                    $arr=$obj->fetch(\PDO::FETCH_ASSOC);
                     self::sqlexplain($arr,$sql,$css);
                 }
             } catch (Exception $e) {
@@ -252,17 +249,16 @@ class SocketLog
         return self::$_instance;
     }
 
-    protected static function _log($type,$logs,$css='')
-    {
-        self::getInstance()->record($type,$logs,$css);
-    }
-
 
     protected static function check()
     {
+        if(!self::getConfig('enable'))
+        {
+            return false;
+        }
         $tabid=self::getClientArg('tabid');
          //是否记录日志的检查
-        if(!$tabid && !self::getConfig('force_client_id'))
+        if(!$tabid && !self::getConfig('force_client_ids'))
         {
             return false;
         }
@@ -270,7 +266,9 @@ class SocketLog
         $allow_client_ids=self::getConfig('allow_client_ids');
         if(!empty($allow_client_ids))
         {
-            if (!$tabid && in_array(self::getConfig('force_client_id'), $allow_client_ids)) {
+            //通过数组交集得出授权强制推送的client_id
+            self::$_allowForceClientIds = array_intersect($allow_client_ids, self::getConfig('force_client_ids'));
+            if (!$tabid && count(self::$_allowForceClientIds)) {
                 return true;
             }
 
@@ -279,6 +277,10 @@ class SocketLog
             {
                 return false;
             }
+        }
+        else
+        {
+            self::$_allowForceClientIds = self::getConfig('force_client_ids');
         }
         return true;
     }
@@ -315,9 +317,37 @@ class SocketLog
 
 
     //设置配置
-    public static function  setConfig($config)
+    public static function  config($config)
     {
         $config=array_merge(self::$config,$config);
+
+        /*
+         * modify by chenchenjsyz@163.com
+         * 添加支持force_client_ids和allow_client_ids为字符串
+         * @date 2016-01-20
+         */
+        if(isset($config['force_client_ids']) && is_string($config['force_client_ids'])){
+            if($config['force_client_ids']){
+                $config['force_client_ids'] = explode(',',$config['force_client_ids']);
+            }else{//如果为空
+                $config['force_client_ids'] = array();
+            }
+        }
+
+        if(isset($config['allow_client_ids']) && is_string($config['allow_client_ids'])){
+            if($config['allow_client_ids']){
+                $config['allow_client_ids'] = explode(',',$config['allow_client_ids']);
+            }else{//如果为空
+                $config['allow_client_ids'] = array();
+            }
+        }
+
+
+        if(isset($config['force_client_id'])){
+            //兼容老配置
+            $config['force_client_ids']=array_merge($config['force_client_ids'],array($config['force_client_id'])); 
+        }
+
         self::$config=$config;
         if(self::check())
         {
@@ -400,7 +430,7 @@ class SocketLog
         }
         if(self::$start_memory)
         {
-            $memory_use=number_format(memory_get_usage()-self::$start_memory/1024,2);
+            $memory_use=number_format((memory_get_usage()-self::$start_memory)/1024,2);
             $memory_str="[内存消耗：{$memory_use}kb]";
         }
 
@@ -448,20 +478,36 @@ class SocketLog
         {
             $client_id='';
         }
-        if($force_client_id=self::getConfig('force_client_id'))
+        if(!empty(self::$_allowForceClientIds))
         {
-            $client_id=$force_client_id;
+            //强制推送到多个client_id
+            foreach(self::$_allowForceClientIds as $force_client_id) {
+                $client_id=$force_client_id;
+                self::sendToClient($tabid, $client_id, self::$logs, $force_client_id);
+            }
+        } else {
+            self::sendToClient($tabid, $client_id, self::$logs, '');
         }
-        $logs=array(
+    }
+
+    /**
+     * 发送给指定客户端
+     * @author Zjmainstay
+     * @param $tabid
+     * @param $client_id
+     * @param $logs
+     * @param $force_client_id
+     */
+    protected static function sendToClient($tabid, $client_id, $logs, $force_client_id) {
+         $logs=array(
             'tabid'=>$tabid,
             'client_id'=>$client_id,
-            'logs'=>self::$logs,
+            'logs'=>$logs,
             'force_client_id'=>$force_client_id,
-        );
+        ); 
         $msg=@json_encode($logs);
         $address='/'.$client_id; //将client_id作为地址， server端通过地址判断将日志发布给谁
-        self::send(self::getConfig('host'),$msg,$address);
-
+        self::send(self::getConfig('host'),$msg,$address); 
     }
 
     public function __destruct()

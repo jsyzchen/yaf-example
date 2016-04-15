@@ -9,8 +9,9 @@ use Yaf\Controller_Abstract;
 
 class IndexController extends Controller_Abstract
 {
+
+
 	public function indexAction() {
-		$this->getView()->assign("body", "Hello Wrold");
-		//$this->getView()->display('index/index.tpl');
-	}
+		//$this->getView()->assign("body", "Hello Wrold");
+	}	
 }

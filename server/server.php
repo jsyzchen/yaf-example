@@ -18,8 +18,8 @@ class HttpServer
 			array(
 				'worker_num' => 16,
 				'daemonize' => true,
-	            'max_request' => 10000,
-	            'dispatch_mode' => 1
+				'max_request' => 10000,
+				'dispatch_mode' => 1
 			)
 		);
 
@@ -51,36 +51,36 @@ class HttpServer
 
 			ob_start();
 			try {
-				$yaf_request = new Yaf_Request_Http( 
+				$yaf_request = new Yaf\Request_Http(
 					HttpServer::$server['request_uri']);
 
-			    $this->application
-			    ->getDispatcher()->dispatch($yaf_request);
-			    
-			    // unset(Yaf_Application::app());
+				$this->application
+					->getDispatcher()->dispatch($yaf_request);
+
+				// unset(Yaf_Application::app());
 			} catch ( Yaf_Exception $e ) {
 				var_dump( $e );
 			}
-			
-		    $result = ob_get_contents();
 
-		  	ob_end_clean();
+			$result = ob_get_contents();
 
-		  	// add Header
-		  	
-		  	// add cookies
-		  	
-		  	// set status
-		  	$response->end($result);
+			ob_end_clean();
+
+			// add Header
+
+			// add cookies
+
+			// set status
+			$response->end($result);
 		});
 
 		$http->start();
 	}
 
 	public function onWorkerStart() {
-		define('APPLICATION_PATH', dirname(__DIR__));
-		$this->application = new Yaf_Application( APPLICATION_PATH . 
-					"/conf/application.ini");
+		define('APP_PATH', dirname(__DIR__));
+		$this->application = new Yaf\Application( APP_PATH .
+			"/conf/cli.ini");
 		ob_start();
 		$this->application->bootstrap()->run();
 		ob_end_clean();
@@ -88,9 +88,9 @@ class HttpServer
 
 	public static function getInstance() {
 		if (!self::$instance) {
-            self::$instance = new HttpServer;
-        }
-        return self::$instance;
+			self::$instance = new HttpServer;
+		}
+		return self::$instance;
 	}
 }
 

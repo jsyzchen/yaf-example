@@ -33,6 +33,14 @@ class Bootstrap extends Bootstrap_Abstract{
 		$GLOBALS['config'] = $this->_config->toArray();
 	}
 
+	public function _initLogger(Dispatcher $dispatcher){
+        //SocketLog
+        if($this->_config->socketlog->enable){
+        	Loader::import('Common/Logger/slog.function.php');
+        	slog($this->_config->socketlog->toArray(),'config');
+        }
+    }
+
 	public function _initPlugin(Dispatcher $dispatcher) {
 		//注册一个插件
 		//$objSamplePlugin = new SamplePlugin();
@@ -49,27 +57,20 @@ class Bootstrap extends Bootstrap_Abstract{
 		));
 	}
 
-    public function _initLogger(Dispatcher $dispatcher){
-        //SocketLog
-        if($this->_config->socketlog->debug){
-        	Loader::import('Common/Logger/SocketLog.class.php');
-        	slog($this->_config->socketlog->toArray(),'set_config');
-        }       
-        //\Common\Logger\Helper::$_logpath = APPLICATION_PATH . '/log';
-    }
-
 	public function _initView(Dispatcher $dispatcher) {
 		//在这里注册自己的view控制器，例如smarty,firekylin
 		/* init smarty view engine */
-		Loader::import("Smarty/Adapter.php");		
-		$smarty = new Adapter(null, Registry::get("config")->get("smarty"));
-		$dispatcher->setView($smarty);
+		if('Smarty' == $this->_config->application->view->name){
+			Loader::import("Smarty/Adapter.php");		
+			$smarty = new Adapter(null, Registry::get("config")->get("smarty"));
+			$dispatcher->setView($smarty);
+		}		
 	}
 
 	//Db
 	public function _initDefaultDbAdapter(Dispatcher $dispatcher)
 	{
-		if('Eloquent' == $this->_config->user->orm_type){//初始化 Eloquent ORM
+		if('Eloquent' == $this->_config->database->orm){//初始化 Eloquent ORM
 			$capsule = new Capsule();
 			$capsule->addConnection($this->_config->database->toArray());
 			$capsule->setEventDispatcher(new LDispatcher(new LContainer));
