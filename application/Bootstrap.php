@@ -22,8 +22,8 @@ class Bootstrap extends Bootstrap_Abstract{
 
     public function _initSession (Dispatcher $dispatcher)
     {
-        Session::getInstance()->start();
-        header('content-type:text/html;charset=utf-8');
+    	header('content-type:text/html;charset=utf-8');
+        Session::getInstance()->start();       
     }
 
     public function _initConfig() {
