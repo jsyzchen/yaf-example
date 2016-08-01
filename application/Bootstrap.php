@@ -16,7 +16,6 @@ use Yaf\Bootstrap_Abstract;
 use Illuminate\Events\Dispatcher as LDispatcher;
 use Illuminate\Container\Container as LContainer;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use think\org\Slog;
 
 class Bootstrap extends Bootstrap_Abstract{
 	private $_config;
