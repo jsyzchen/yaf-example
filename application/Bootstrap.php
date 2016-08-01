@@ -16,6 +16,7 @@ use Yaf\Bootstrap_Abstract;
 use Illuminate\Events\Dispatcher as LDispatcher;
 use Illuminate\Container\Container as LContainer;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use think\org\Slog;
 
 class Bootstrap extends Bootstrap_Abstract{
 	private $_config;
@@ -36,8 +37,10 @@ class Bootstrap extends Bootstrap_Abstract{
 	public function _initLogger(Dispatcher $dispatcher){
         //SocketLog
         if($this->_config->socketlog->enable){
-        	Loader::import('Common/Logger/slog.function.php');
-        	slog($this->_config->socketlog->toArray(),'config');
+            //载入
+            Loader::import('Common/Logger/slog.function.php');
+            //配置SocketLog
+            slog($this->_config->socketlog->toArray(),'config');
         }
     }
 
@@ -86,6 +89,6 @@ class Bootstrap extends Bootstrap_Abstract{
 
     //公用函数
     public function _initFunction(){
-        Loader::import('Common/function.php');
+        Loader::import('Common/functions.php');
     }
 }
