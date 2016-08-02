@@ -2,9 +2,6 @@
 
 namespace Db;
 
-if (!defined('YAF'))
-    exit(-1);
-
 /**
  * mysql操作类
  *
@@ -35,7 +32,6 @@ class Mysql implements DbInterface {
         $_db_charset = $db_config->charset;
         $_db_usr = $db_config->username;
         $_db_pwd = $db_config->password;
-
         $idx = md5($_db_host . $_db_name);
 
         if (!isset(self::$_instances[$idx])) {
