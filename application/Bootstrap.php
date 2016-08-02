@@ -55,10 +55,11 @@ class Bootstrap extends Bootstrap_Abstract{
 
 	public function _initLocalName() {
 		Loader::getInstance()->registerLocalNamespace(array(
-			'Smarty',
+			'Common','Db','Smarty','Yar'
 		));
 	}
 
+	//View
 	public function _initView(Dispatcher $dispatcher) {
 		//在这里注册自己的view控制器，例如smarty,firekylin
 		/* init smarty view engine */
@@ -72,19 +73,21 @@ class Bootstrap extends Bootstrap_Abstract{
 	//Db
 	public function _initDefaultDbAdapter(Dispatcher $dispatcher)
 	{
-		if('Eloquent' == $this->_config->database->orm){//初始化 Eloquent ORM
-			$capsule = new Capsule();
+		if('Eloquent' == $this->_config->database->ORM){//初始化 Eloquent ORM
+			$capsule = new Capsule;
 			$capsule->addConnection($this->_config->database->toArray());
 			$capsule->setEventDispatcher(new LDispatcher(new LContainer));
 			$capsule->setAsGlobal();
-			$capsule->bootEloquent();
-		}
-	}
+            //开启Eloquent
+            $capsule->bootEloquent();
 
-    //公用方法
-    public function _initUtil(Dispatcher $dispatcher){
-        //Loader::import('Common/Util.php');
-    }
+            //可以直接使用DB,类似Laravel的DB Facade
+            class_alias('Illuminate\Database\Capsule\Manager', 'DB');
+		}
+
+        //\Db\Factory::create();
+
+	}
 
     //公用函数
     public function _initFunction(){
