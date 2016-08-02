@@ -73,7 +73,7 @@ class Bootstrap extends Bootstrap_Abstract{
 	//Db
 	public function _initDefaultDbAdapter(Dispatcher $dispatcher)
 	{
-		if('Eloquent' == $this->_config->database->ORM){//初始化 Eloquent ORM
+		if('Eloquent' == $this->_config->database->orm){//初始化 Eloquent ORM
 			$capsule = new Capsule;
 			$capsule->addConnection($this->_config->database->toArray());
 			$capsule->setEventDispatcher(new LDispatcher(new LContainer));
