@@ -2,11 +2,6 @@
 
 namespace Db;
 
-if (!defined('YAF'))
-    exit(-1);
-
-
-
 /*
  * Db接口定义
  *
