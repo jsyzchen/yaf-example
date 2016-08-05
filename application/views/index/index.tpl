@@ -13,11 +13,11 @@
 		  <div class="col-md-8 col-md-offset-2">
 		  	<div class="panel panel-default">
 		  	  <div class="panel-heading">
-		  	    <h3 class="panel-title">生活服务</h3>
+		  	    <h3 class="panel-title">chen-yaf</h3>
 		  	  </div>
 		  	  <div class="panel-body">
 		  	    <ul class="list-unstyled" style="overflow: hidden;">
-			  	    <li><a href="kuaidi">快递查询</a></li>
+			  	    <li><a href="1">快递查询</a></li>
 			  	    <li><a href="2">产品介绍</a></li>
 			  	    <li><a href="3">服务介绍</a></li>
 			  	    <li><a href="4">技术支持</a></li>
@@ -35,7 +35,7 @@
 			  	    <li><a href="4">技术支持</a></li>
 			  	    <li><a href="5">立刻购买</a></li>
 			  	    <li><a href="6">联系我们</a></li>
-		  	    </ul> 
+		  	    </ul>
 		  	  </div>
 		  	</div>
 		  </div>
