@@ -13,17 +13,12 @@ use Yaf\Session;
 use Yaf\Dispatcher;
 use Yaf\Application;
 use Yaf\Bootstrap_Abstract;
-use Illuminate\Events\Dispatcher as LDispatcher;
-use Illuminate\Container\Container as LContainer;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Bootstrap extends Bootstrap_Abstract{
 	private $_config;
 
-    public function _initSession (Dispatcher $dispatcher)
-    {
-    	header('content-type:text/html;charset=utf-8');
-        Session::getInstance()->start();       
+    public function _initLoader(){
+        Loader::import(APP_PATH . '/vendor/autoload.php');
     }
 
     public function _initConfig() {
@@ -73,20 +68,21 @@ class Bootstrap extends Bootstrap_Abstract{
 	//Db
 	public function _initDefaultDbAdapter(Dispatcher $dispatcher)
 	{
-		if('Eloquent' == $this->_config->database->orm){//初始化 Eloquent ORM
-			$capsule = new Capsule;
-			$capsule->addConnection($this->_config->database->toArray());
-			$capsule->setEventDispatcher(new LDispatcher(new LContainer));
-			$capsule->setAsGlobal();
-            //开启Eloquent
+        if($this->_config->database->orm == 'Eloquent'){//初始化 illuminate/database
+            $capsule = new \Illuminate\Database\Capsule\Manager;
+            $capsule->addConnection($this->_config->database->toArray());
+            $capsule->setEventDispatcher(new \Illuminate\Events\Dispatcher(new \Illuminate\Container\Container));
+            $capsule->setAsGlobal();
+
+            //开启Eloquent ORM
             $capsule->bootEloquent();
 
             //可以直接使用DB,类似Laravel的DB Facade
             class_alias('Illuminate\Database\Capsule\Manager', 'DB');
-		}
-
-        //\Db\Factory::create();
-
+        }else{
+            //默认使用简单的Db
+            \Db\Factory::create();
+        }
 	}
 
     //公用函数
