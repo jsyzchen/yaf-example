@@ -50,7 +50,7 @@ class Bootstrap extends Bootstrap_Abstract{
 
 	public function _initLocalName() {
 		Loader::getInstance()->registerLocalNamespace(array(
-			'Common','Db','Smarty','Yar'
+			'Common','Db','Smarty'
 		));
 	}
 
