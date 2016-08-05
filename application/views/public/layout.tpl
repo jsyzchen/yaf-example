@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">	
-	<title>{{block name=title}}查查喽{{/block}}</title>
+	<title>{{block name=title}}chen-yaf{{/block}}</title>
 	<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> 
 	<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -13,7 +13,7 @@
 <body>
 	<div id="header">
 		<nav class="navbar navbar-inverse navbar-fixed-top">
-		  <div class="container">		    
+		  <div class="container">
 		    <div class="navbar-header">
 		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
 		        <span class="sr-only">Toggle navigation</span>
@@ -21,7 +21,7 @@
 		        <span class="icon-bar">/span>
 		        <span class="icon-bar"></span>
 		      </button>
-		      <a class="navbar-brand hidden-sm" href="#">查查喽</a>
+		      <a class="navbar-brand hidden-sm" href="#">chen-yaf</a>
 		    </div>
 
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -53,7 +53,7 @@
 		      </ul>
 		    </div>
 		  </div>
-		</nav> 		
+		</nav>
 	</div>
 	{{block name=main}}{{/block}}
 	<div id="footer">
