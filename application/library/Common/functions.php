@@ -114,7 +114,7 @@ function input($name,$default='',$filter=null,$datas=null) {
     }
     if(''==$name) { // 获取全部变量
         $data       =   $input;
-        $filters    =   isset($filter)?$filter:get_config('user','default_filter');
+        $filters    =   isset($filter)?$filter:\Yaf\Registry::get('config')->user->default_filter;
         if($filters) {
             if(is_string($filters)){
                 $filters    =   explode(',',$filters);
@@ -125,7 +125,7 @@ function input($name,$default='',$filter=null,$datas=null) {
         }
     }elseif(isset($input[$name])) { // 取值操作
         $data       =   $input[$name];
-        $filters    =   isset($filter)?$filter:get_config('user','default_filter');
+        $filters    =   isset($filter)?$filter:\Yaf\Registry::get('config')->user->default_filter;
         if($filters) {
             if(is_string($filters)){
                 if(0 === strpos($filters,'/')){
