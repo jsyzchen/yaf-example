@@ -18,7 +18,9 @@ class Bootstrap extends Bootstrap_Abstract{
 	private $_config;
 
     public function _initLoader(){
-        Loader::import(APP_PATH . '/vendor/autoload.php');
+        if(file_exists(APP_PATH . '/vendor/autoload.php')){
+            Loader::import(APP_PATH . '/vendor/autoload.php');
+        }
     }
 
     public function _initConfig() {
