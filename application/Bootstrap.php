@@ -15,6 +15,7 @@ use Yaf\Application;
 use Yaf\Bootstrap_Abstract;
 
 class Bootstrap extends Bootstrap_Abstract{
+
 	private $_config;
 
     public function _initLoader(){
