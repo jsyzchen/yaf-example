@@ -28,7 +28,6 @@ class Bootstrap extends Bootstrap_Abstract{
 		//把配置保存起来
 		$this->_config = Application::app()->getConfig();
 		Registry::set('config', $this->_config);
-		$GLOBALS['config'] = $this->_config->toArray();
 	}
 
 	public function _initLogger(Dispatcher $dispatcher){
