@@ -9,7 +9,6 @@
  */
 use Yaf\Loader;
 use Yaf\Registry;
-use Yaf\Session;
 use Yaf\Dispatcher;
 use Yaf\Application;
 use Yaf\Bootstrap_Abstract;
