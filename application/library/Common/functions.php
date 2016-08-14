@@ -193,35 +193,6 @@ function other_safe_filter(&$value)
 }
 
 /**
- * 获取用户定义的局部config for yaf
- * @param string $name
- * @return mixed
- */
-function get_config($prefix=null, $name=null){
-    static $configs=null;
-    if(!is_array($configs)){
-        $configs = $GLOBALS["config"];
-    }
-    if(is_null($prefix)){
-        return $configs;
-    }else{
-        if(is_null($name)){
-            if(isset($configs[$prefix])){
-                return $configs[$prefix];
-            }else{
-                return null;
-            }
-        }else{
-            if(isset($configs[$prefix][$name])){
-                return $configs[$prefix];
-            }else{
-                return null;
-            }
-        }
-    }
-}
-
-/**
  * 获取客户端IP地址 FROM ThinkPHP 系统函数库
  * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
  * @param boolean $adv 是否进行高级模式获取（有可能被伪装）
