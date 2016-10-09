@@ -66,25 +66,55 @@ class Bootstrap extends Bootstrap_Abstract{
 		}		
 	}
 
-	//Db
-	public function _initDefaultDbAdapter(Dispatcher $dispatcher)
-	{
-        if($this->_config->database->orm == 'Eloquent'){//初始化 illuminate/database
-            $capsule = new \Illuminate\Database\Capsule\Manager;
-            $capsule->addConnection($this->_config->database->toArray());
-            $capsule->setEventDispatcher(new \Illuminate\Events\Dispatcher(new \Illuminate\Container\Container));
-            $capsule->setAsGlobal();
+	//Db,若使用Facedes,则无需使用该方法
+	/*public function _initDefaultDbAdapter()
+	{  
+        $capsule = new \Illuminate\Database\Capsule\Manager;
+        $capsule->addConnection($this->_config->database->toArray());
+        $capsule->setEventDispatcher(new \Illuminate\Events\Dispatcher(new \Illuminate\Container\Container));
+        $capsule->setAsGlobal();
 
-            //开启Eloquent ORM
-            $capsule->bootEloquent();
+        //开启Eloquent ORM
+        $capsule->bootEloquent();
+  
+	}*/
 
-            //可以直接使用DB,类似Laravel的DB Facade
-            class_alias('Illuminate\Database\Capsule\Manager', 'DB');
-        }else{
-            //默认使用简单的Db
-            \Db\Factory::create();
+	/**
+     * 初始化facades
+     * @author jsyzchenchen@gmail.com
+     * @date 2016/10/06
+     */
+    public function _initFacedes(){
+        //container
+        $container = new \Illuminate\Container\Container();
+        $container->instance('config', $config = new \Illuminate\Config\Repository());
+        $database_config = [
+            'fetch' => \PDO::FETCH_CLASS,
+            'default' => 'mysql',
+            'connections' => [
+                'mysql' => $this->_config->database->toArray()
+            ],
+        ];
+        $config->set('database', $database_config);
+
+        //RegisterFacades
+        \Illuminate\Support\Facades\Facade::clearResolvedInstances();
+        \Illuminate\Support\Facades\Facade::setFacadeApplication($container);
+        $aliases = array();
+        Loader::import(APPLICATION_PATH . '/conf/aliases.php');
+        \Common\AliasLoader::getInstance($aliases)->register();
+
+        //RegisterProviders
+        $providers = array();
+        Loader::import(APPLICATION_PATH . '/conf/providers.php');
+        foreach ($providers as $provider) {
+            $provider = new $provider($container);
+            $provider->register();
+            if (method_exists($provider, 'boot')) {
+                call_user_func([$provider,'boot']);
+            }
         }
-	}
+    }
 
     //公用函数
     public function _initFunction(){
