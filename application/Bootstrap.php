@@ -17,18 +17,28 @@ class Bootstrap extends Bootstrap_Abstract{
 
 	private $_config;
 
+    /**
+     * 加载
+     */
     public function _initLoader(){
         if(file_exists(APP_PATH . '/vendor/autoload.php')){
             Loader::import(APP_PATH . '/vendor/autoload.php');
         }
     }
 
+    /**
+     * 配置
+     */
     public function _initConfig() {
 		//把配置保存起来
 		$this->_config = Application::app()->getConfig();
 		Registry::set('config', $this->_config);
 	}
 
+    /**
+     * 日志
+     * @param Dispatcher $dispatcher
+     */
 	public function _initLogger(Dispatcher $dispatcher){
         //SocketLog
         if($this->_config->socketlog->enable){
@@ -39,23 +49,37 @@ class Bootstrap extends Bootstrap_Abstract{
         }
     }
 
+    /**
+     * 插件
+     * @param Dispatcher $dispatcher
+     */
 	public function _initPlugin(Dispatcher $dispatcher) {
 		//注册一个插件
 		//$objSamplePlugin = new SamplePlugin();
 		//$dispatcher->registerPlugin($objSamplePlugin);
 	}
 
+    /**
+     * 路由
+     * @param Dispatcher $dispatcher
+     */
 	public function _initRoute(Dispatcher $dispatcher) {
 		//在这里注册自己的路由协议,默认使用简单路由
 	}
 
+    /**
+     * LocalName
+     */
 	public function _initLocalName() {
 		Loader::getInstance()->registerLocalNamespace(array(
-			'Common','Db','Smarty'
+			'Common','Smarty'
 		));
 	}
 
-	//View
+    /**
+     * 视图
+     * @param Dispatcher $dispatcher
+     */
 	public function _initView(Dispatcher $dispatcher) {
 		//在这里注册自己的view控制器，例如smarty,firekylin
 		/* init smarty view engine */
@@ -66,7 +90,9 @@ class Bootstrap extends Bootstrap_Abstract{
 		}		
 	}
 
-	//Db,若使用Facedes,则无需使用该方法
+    /**
+     * Db,若使用Facedes,则无需使用该方法
+     */
 	/*public function _initDefaultDbAdapter()
 	{  
         $capsule = new \Illuminate\Database\Capsule\Manager;
@@ -115,8 +141,10 @@ class Bootstrap extends Bootstrap_Abstract{
             }
         }
     }
-
-    //公用函数
+    
+    /**
+     * 公用函数
+     */
     public function _initFunction(){
         Loader::import('Common/functions.php');
     }
