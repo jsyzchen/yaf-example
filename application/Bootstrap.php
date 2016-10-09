@@ -141,7 +141,7 @@ class Bootstrap extends Bootstrap_Abstract{
             }
         }
     }
-    
+
     /**
      * 公用函数
      */
