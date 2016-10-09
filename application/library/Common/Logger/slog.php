@@ -3,7 +3,8 @@
  * github: https://github.com/luofei614/SocketLog
  * @author luofei614<weibo.com/luofei614>
  */
-namespace think\org;
+namespace Common\Logger;
+
 class Slog
 {
     public static $start_time=0;
@@ -322,7 +323,7 @@ class Slog
         $config=array_merge(self::$config,$config);
 
         /*
-         * modify by chenchenjsyz@163.com
+         * modify by jsyzchenchen@gmail.com
          * 添加支持force_client_ids和allow_client_ids为字符串
          * @date 2016-01-20
          */
