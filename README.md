@@ -1,5 +1,6 @@
 # chen-yaf
 扩展了下鸟哥的[YAF](https://github.com/laruence/php-yaf)扩展  
+
 添加了:   
 * [Eloquent ORM](https://github.com/illuminate/database)  
 * Laravel中的Facades  
@@ -8,7 +9,11 @@
 * [Swoole](https://github.com/swoole/swoole-src)   
 * 罗飞的[SocketLog](https://github.com/luofei614/SocketLog)   
 
-注：记得 composer install   
+注：记得 
+```sh
+composer install  
+```
+
 yaf配置:  
 ```sh
 yaf.use_spl_autoload=1
