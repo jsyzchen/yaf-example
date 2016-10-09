@@ -1,9 +1,9 @@
 {
     "require": {
-        "illuminate/database": "5.0.*",
-        "illuminate/events": "5.0.*",
-        "illuminate/support":"5.0.*",
-        "illuminate/config": "5.0.*",
+        "illuminate/database": "5.1.*",
+        "illuminate/events": "5.1.*",
+        "illuminate/support":"5.1.*",
+        "illuminate/config": "5.1.*",
         "symfony/debug": "2.6.*",
         "symfony/var-dumper": "2.6.*",
         "chrisboulton/php-resque": "1.2.x",
