@@ -1,2 +1,0 @@
-Error Msg:{{$exception->getMessage()}}
-
