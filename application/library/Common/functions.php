@@ -5,31 +5,6 @@
  * date 2015-11-30
  */
 
-
-/**
- * PHP生成指定随机字符串的简单实现方法
- * @param $length
- * @param string $type
- * @return string
- */
-function get_nonce_str($length,$type="number,upper,lower"){
-    $valid_type = array('number','upper','lower');
-    $case = explode(",",$type);
-    $count = count($case);
-    //根据交集判断参数是否合法
-    if($count !== count(array_intersect($case,$valid_type))){
-        return false;
-    }
-    $lower = "abcdefghijklmnopqrstuvwxyz";
-    $upper = strtoupper($lower);
-    $number = "0123456789";
-    $str_list = "";
-    for($i=0;$i<$count;++$i){
-        $str_list .= $$case[$i];
-    }
-    return substr(str_shuffle($str_list),0,$length);
-}
-
 /**
  * 获取输入参数 支持过滤和默认值 From ThinkPHP 系统函数库(I函数)
  * 使用方法:
@@ -193,12 +168,29 @@ function other_safe_filter(&$value)
 }
 
 /**
+ * 用于input函数的递归
+ * @param $filter
+ * @param $data
+ * @return array
+ */
+function array_map_recursive($filter, $data)
+{
+    $result = array();
+    foreach ($data as $key => $val) {
+        $result[$key] = is_array($val)
+            ? array_map_recursive($filter, $val)
+            : call_user_func($filter, $val);
+    }
+    return $result;
+}
+
+/**
  * 获取客户端IP地址 FROM ThinkPHP 系统函数库
  * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
  * @param boolean $adv 是否进行高级模式获取（有可能被伪装）
  * @return mixed
  */
-function get_client_ip($type = 0,$adv=false) {
+function get_client_ip($type = 0, $adv = false) {
     $type       =  $type ? 1 : 0;
     static $ip  =   NULL;
     if ($ip !== NULL) return $ip[$type];
@@ -221,36 +213,6 @@ function get_client_ip($type = 0,$adv=false) {
     $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
     return $ip[$type];
 }
-
-/**
- * URL重定向 FROM ThinkPHP 系统函数库
- * @param string $url 重定向的URL地址
- * @param integer $time 重定向的等待时间（秒）
- * @param string $msg 重定向前的提示信息
- * @return void
- */
-function redirect($url, $time=0, $msg='') {
-    //多行URL地址支持
-    $url        = str_replace(array("\n", "\r"), '', $url);
-    if (empty($msg))
-        $msg    = "系统将在{$time}秒之后自动跳转到{$url}！";
-    if (!headers_sent()) {
-        // redirect
-        if (0 === $time) {
-            header('Location: ' . $url);
-        } else {
-            header("refresh:{$time};url={$url}");
-            echo($msg);
-        }
-        exit();
-    } else {
-        $str    = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
-        if ($time != 0)
-            $str .= $msg;
-        exit($str);
-    }
-}
-
 
 /**
  * GET 请求 FROM wechat-php-sdk
@@ -282,9 +244,9 @@ function http_get($url){
  * @param boolean $post_file 是否文件上传
  * @return string content
  */
-function http_post($url,$param,$post_file=false){
+function http_post($url, $param, $post_file=false){
     $oCurl = curl_init();
-    if(stripos($url,"https://")!==FALSE){
+    if (stripos($url,"https://") !== FALSE) {
         curl_setopt($oCurl, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($oCurl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($oCurl, CURLOPT_SSLVERSION, 1); //CURL_SSLVERSION_TLSv1
@@ -319,57 +281,56 @@ function http_post($url,$param,$post_file=false){
  * @return array
  * @author jsyzchenchen@gmail.com
  */
-function curl_multi($url_array,$curlopt_timeout=10){
+function curl_multi($data, $options = array())
+{
     $handles = $contents = array();
-
     //初始化curl multi对象
     $mh = curl_multi_init();
-
     //添加curl 批处理会话
-    foreach($url_array as $key => $url)
-    {
+    foreach ($data as $key => $value) {
+        $url = (is_array($value) && !empty($value['url'])) ? $value['url'] : $value;
         $handles[$key] = curl_init($url);
         curl_setopt($handles[$key], CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($handles[$key], CURLOPT_TIMEOUT, $curlopt_timeout);
+
+        //判断是否是post
+        if (is_array($value)) {
+            if (!empty($value['post'])) {
+                curl_setopt($handles[$key], CURLOPT_POST,       1);
+                curl_setopt($handles[$key], CURLOPT_POSTFIELDS, $value['post']);
+            }
+        }
+
+        //extra options?
+        if (!empty($options)) {
+            curl_setopt_array($handles[$key], $options);
+        }
 
         curl_multi_add_handle($mh, $handles[$key]);
     }
-
     //======================执行批处理句柄=================================
     $active = null;
     do {
         $mrc = curl_multi_exec($mh, $active);
     } while ($mrc == CURLM_CALL_MULTI_PERFORM);
-
-
     while ($active and $mrc == CURLM_OK) {
-
-        if(curl_multi_select($mh) === -1){
+        if (curl_multi_select($mh) === -1) {
             usleep(100);
         }
         do {
             $mrc = curl_multi_exec($mh, $active);
         } while ($mrc == CURLM_CALL_MULTI_PERFORM);
-
     }
     //====================================================================
-
     //获取批处理内容
-    foreach($handles as $i => $ch)
-    {
+    foreach ($handles as $i => $ch) {
         $content = curl_multi_getcontent($ch);
         $contents[$i] = curl_errno($ch) == 0 ? $content : '';
     }
-
     //移除批处理句柄
-    foreach($handles as $ch)
-    {
+    foreach ($handles as $ch) {
         curl_multi_remove_handle($mh, $ch);
     }
-
     //关闭批处理句柄
     curl_multi_close($mh);
-
     return $contents;
 }
-?>
