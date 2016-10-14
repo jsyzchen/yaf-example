@@ -5,13 +5,9 @@
  * @desc 默认控制器
  * @see http://www.php.net/manual/en/class.yaf-controller-abstract.php
  */
-use Yaf\Controller_Abstract;
-
-class IndexController extends Controller_Abstract
+class IndexController extends \Yaf\Controller_Abstract
 {
-
-
-	public function indexAction() {
-		//$this->getView()->assign("body", "Hello Wrold");
-	}	
+    public function indexAction() {//默认Action
+        $this->getView()->assign("content", "Hello World");
+    }
 }
