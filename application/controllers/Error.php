@@ -5,13 +5,10 @@
  * @see http://www.php.net/manual/en/yaf-dispatcher.catchexception.php
  * @author root
  */
-use Yaf\Controller_Abstract;
-class ErrorController extends Controller_Abstract {
-
-	//从2.1开始, errorAction支持直接通过参数获取异常
+class ErrorController extends \Yaf\Controller_Abstract {
 	public function errorAction($exception) {
-		//1. assign to view engine
+		// assign to view engine
 		$this->getView()->assign("exception", $exception);
-		//5. render by Yaf 
 	}
+
 }
