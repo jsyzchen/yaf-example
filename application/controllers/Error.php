@@ -8,7 +8,7 @@
 class ErrorController extends \Yaf\Controller_Abstract {
 	public function errorAction($exception) {
 		// assign to view engine
-		$this->getView()->assign("exception", $exception);
+		$this->getView()->assign("error_msg", $exception->getMessage());
 	}
 
 }
