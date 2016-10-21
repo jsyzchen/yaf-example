@@ -50,11 +50,13 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
 	public function _initLogger(\Yaf\Dispatcher $dispatcher)
     {
         //SocketLog
-        if ($this->config->socketlog->enable) {
-            //载入
-            \Yaf\Loader::import('Common/Logger/slog.function.php');
-            //配置SocketLog
-            slog($this->config->socketlog->toArray(),'config');
+        if (Yaf\ENVIRON === 'develop') {
+            if ($this->config->socketlog->enable) {
+                //载入
+                \Yaf\Loader::import('Common/Logger/slog.function.php');
+                //配置SocketLog
+                slog($this->config->socketlog->toArray(),'config');
+            }
         }
     }
 
