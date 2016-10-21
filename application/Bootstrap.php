@@ -97,43 +97,24 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
         $dispatcher->setView($twig);
     }
 
-	/**
-     * 初始化facades
-     * @author jsyzchenchen@gmail.com
-     * @date 2016/10/06
-     */
-    public function _initFacedes()
+    /*
+    * 初始化数据库分发器
+    * @function _initDefaultDbAdapter
+    * @author   chenchen16@leju.com
+    */
+    public function _initDefaultDbAdapter()
     {
-        //container
-        $container = new \Illuminate\Container\Container();
-        $container->instance('config', $config = new \Illuminate\Config\Repository());
-        $database_config = [
-            'fetch' => \PDO::FETCH_CLASS,
-            'default' => 'mysql',
-            'connections' => [
-                'mysql' => $this->config->database->toArray()
-            ],
-        ];
-        $config->set('database', $database_config);
+        //初始化 illuminate/database
+        $capsule = new \Illuminate\Database\Capsule\Manager;
+        $capsule->addConnection($this->config->database->toArray());
+        $capsule->setEventDispatcher(new \Illuminate\Events\Dispatcher(new \Illuminate\Container\Container));
+        $capsule->setAsGlobal();
+        //开启Eloquent ORM
+        $capsule->bootEloquent();
 
-        //RegisterFacades
-        \Illuminate\Support\Facades\Facade::clearResolvedInstances();
-        \Illuminate\Support\Facades\Facade::setFacadeApplication($container);
-        $aliases = array();
-        \Yaf\Loader::import(APP_PATH . '/conf/aliases.php');
-        \Common\AliasLoader::getInstance($aliases)->register();
-
-        //RegisterProviders
-        $providers = array();
-        \Yaf\Loader::import(APP_PATH . '/conf/providers.php');
-        foreach ($providers as $provider) {
-            $provider = new $provider($container);
-            $provider->register();
-            if (method_exists($provider, 'boot')) {
-                call_user_func([$provider,'boot']);
-            }
-        }
+        class_alias('\Illuminate\Database\Capsule\Manager', 'DB');
     }
+
 
     /**
      * 公用函数载入
