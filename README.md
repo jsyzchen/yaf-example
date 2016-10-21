@@ -3,11 +3,10 @@
 
 添加了:   
 * [Eloquent ORM](https://github.com/illuminate/database)  
-* Laravel中的Facades  
 * [Twig](http://twig.sensiolabs.org)  
-* 常用函数  
 * [Swoole](https://github.com/swoole/swoole-src)   
 * 罗飞的[SocketLog](https://github.com/luofei614/SocketLog)   
+* 常用函数  
 
 注：记得 
 ```sh
