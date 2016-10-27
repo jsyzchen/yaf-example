@@ -99,11 +99,11 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
         $dispatcher->setView($twig);
     }
 
-    /*
-    * 初始化数据库分发器
-    * @function _initDefaultDbAdapter
-    * @author   chenchen16@leju.com
-    */
+    /**
+     * 初始化数据库分发器
+     * @function _initDefaultDbAdapter
+     * @author   jsyzchenchen@gmail.com
+     */
     public function _initDefaultDbAdapter()
     {
         //初始化 illuminate/database
