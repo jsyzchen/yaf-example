@@ -3,7 +3,8 @@
 
 添加了:   
 * [Eloquent ORM](https://github.com/illuminate/database)  
-* [Twig](http://twig.sensiolabs.org)  
+* [Twig](http://twig.sensiolabs.org)
+* Smarty  
 * [Swoole](https://github.com/swoole/swoole-src)   
 * 罗飞的[SocketLog](https://github.com/luofei614/SocketLog)   
 * 常用函数  
