@@ -90,13 +90,19 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
 
 
     /**
-     * Twig View
+     * View
      * @param \Yaf\Dispatcher $dispatcher
      */
-    public function _initTwig(\Yaf\Dispatcher $dispatcher)
+    public function _initView(\Yaf\Dispatcher $dispatcher)
     {
-        $twig = new \Twig\Adapter(APP_PATH . "/application/views/", $this->config->get("twig")->toArray());
-        $dispatcher->setView($twig);
+        $view_engine = $this->config->application->view->engine;
+        if ($view_engine == 'twig') {//twig模板引擎
+            $twig = new \Twig\Adapter(APP_PATH . "/application/views/", $this->config->get("twig")->toArray());
+            $dispatcher->setView($twig);
+        } elseif ($view_engine == 'smarty') {//smarty模板引擎
+            $smarty = new \Smarty\Adapter(null, $this->config->smarty->toArray());
+            $dispatcher->setView($smarty);
+        }
     }
 
     /**
