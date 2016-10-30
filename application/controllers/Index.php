@@ -7,7 +7,8 @@
  */
 class IndexController extends \Yaf\Controller_Abstract
 {
-    public function indexAction() {//默认Action
-        $this->getView()->assign("content", "Hello Yaf! Hello twig!");
+    public function indexAction()
+    {
+        $this->getView()->assign("content", "Hello Yaf!");
     }
 }
