@@ -6,7 +6,7 @@
 * [Twig](http://twig.sensiolabs.org)
 * [Smarty](http://www.smarty.net/)  
 * [Swoole](https://github.com/swoole/swoole-src)   
-* 罗飞的[SocketLog](https://github.com/luofei614/SocketLog)   
+* [SocketLog](https://github.com/luofei614/SocketLog)   
 * 常用函数  
 
 注：记得 
