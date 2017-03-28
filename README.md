@@ -209,7 +209,7 @@ public function _initFunction()
 # 总结
 [chen-yaf](https://github.com/jsyzchen/chen-yaf)只是一个很简单的yaf例子，加了Eloquent ORM和twig。实际项目中，还需要不断地往里面添加东西。既然我们使用了composer包，那么我们在做自己的项目时就可以很方便的使用第三方包，避免我们重复造轮子。
 推荐一些第三方包吧，也是我们在重构项目里所用到的。
-1.[carbon](https://github.com/briannesbitt/Carbon):对于时间日期的操作。
-2.[php-resque](https://github.com/chrisboulton/php-resque):队列的操作。
-3.[sokil/php-mongo](https://github.com/sokil/php-mongo):mongodb的操作。
+1.[carbon](https://github.com/briannesbitt/Carbon):对于时间日期的操作。  
+2.[php-resque](https://github.com/chrisboulton/php-resque):队列的操作。  
+3.[sokil/php-mongo](https://github.com/sokil/php-mongo):mongodb的操作。  
 4.[monolog](https://github.com/Seldaek/monolog):日志的操作。
