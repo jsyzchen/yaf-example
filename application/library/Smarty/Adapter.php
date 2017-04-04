@@ -51,8 +51,7 @@ class Adapter implements \Yaf\View_Interface
             $this->smarty->template_dir = $path;
             return;
         }
-
-        throw new Exception('Invalid path provided');
+        throw new \Exception('Invalid path provided');
     }
 
     /**
@@ -66,30 +65,6 @@ class Adapter implements \Yaf\View_Interface
     }
 
     /**
-     * Alias for setScriptPath
-     *
-     * @param string $path
-     * @param string $prefix Unused
-     * @return void
-     */
-    public function setBasePath($path, $prefix = 'Zend_View')
-    {
-        return $this->setScriptPath($path);
-    }
-
-    /**
-     * Alias for setScriptPath
-     *
-     * @param string $path
-     * @param string $prefix Unused
-     * @return void
-     */
-    public function addBasePath($path, $prefix = 'Zend_View')
-    {
-        return $this->setScriptPath($path);
-    }
-
-    /**
      * Assign a variable to the template
      *
      * @param string $key The variable name.
@@ -98,7 +73,7 @@ class Adapter implements \Yaf\View_Interface
      */
     public function __set($key, $val)
     {
-        $this->_smarty->assign($key, $val);
+        $this->smarty->assign($key, $val);
     }
 
     /**
@@ -109,7 +84,7 @@ class Adapter implements \Yaf\View_Interface
      */
     public function __isset($key)
     {
-        return (null !== $this->smarty->get_template_vars($key));
+        return (null !== $this->smarty->getTemplateVars($key));
     }
 
     /**
@@ -120,7 +95,7 @@ class Adapter implements \Yaf\View_Interface
      */
     public function __unset($key)
     {
-        $this->smarty->clear_assign($key);
+        $this->smarty->clearAssign($key);
     }
 
     /**
@@ -142,7 +117,6 @@ class Adapter implements \Yaf\View_Interface
             $this->smarty->assign($spec);
             return;
         }
-
         $this->smarty->assign($spec, $value);
     }
 
@@ -157,7 +131,7 @@ class Adapter implements \Yaf\View_Interface
      */
     public function clearVars()
     {
-        $this->smarty->clear_all_assign();
+        $this->smarty->clearAllAssign();
     }
 
     /**
@@ -166,9 +140,9 @@ class Adapter implements \Yaf\View_Interface
      * @param string $name The template to process.
      * @return string The output.
      */
-    public function render($name, $value = NULL)
+    public function render($name, $value = null)
     {
-        return $this->smarty->fetch($name);
+        return $this->smarty->fetch($name, $value);
     }
 
     /**
@@ -176,8 +150,37 @@ class Adapter implements \Yaf\View_Interface
      * @param string $name
      * @param null $value
      */
-    public function display($name, $value = NULL)
+    public function display($name, $value = null)
     {
-        echo $this->smarty->fetch($name);
+        $this->smarty->display($name, $value);
+    }
+
+
+    /**
+     * 魔术方法
+     * @param $method
+     * @param $args
+     * @return mixed
+     * @author chenchen16@leju.com
+     * @date 2016/11/15
+     */
+    public function __call($method, $args)
+    {
+        $smarty = $this->smarty;
+
+        switch (count($args)) {
+            case 0:
+                return $smarty->$method();
+            case 1:
+                return $smarty->$method($args[0]);
+            case 2:
+                return $smarty->$method($args[0], $args[1]);
+            case 3:
+                return $smarty->$method($args[0], $args[1], $args[2]);
+            case 4:
+                return $smarty->$method($args[0], $args[1], $args[2], $args[3]);
+            default:
+                return call_user_func_array([$smarty, $method], $args);
+        }
     }
 }
