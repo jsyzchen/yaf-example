@@ -1,7 +1,7 @@
 # chen-yaf
 >[yaf](https://github.com/laruence/yaf)是鸟哥用C语言编写的一个PHP框架，yaf文档地址：[http://yaf.laruence.com/manual/](http://yaf.laruence.com/manual/)
 
-其实很早之前就接触yaf了,但只是学习学习，没有深入的去了解和使用，但由于最近在重构一个项目，而重构所用到的框架就是yaf框架，正好趁此机会好好地使用了下yaf框架。本篇文章其实主要给一个yaf的例子,就是扩展了下yaf，因为yaf的东西本身就简单，所以快。鸟哥也给了两个例子，[laruence/yaf-examples](https://github.com/laruence/yaf-examples),一个是在yaf里使用Smarty的例子，还有一个是在yaf里加了DB和Log操作的包的例子。我给的yaf例子地址是：[https://github.com/jsyzchen/chen-yaf](https://github.com/jsyzchen/chen-yaf)
+其实很早之前就接触yaf了,但只是学习学习，没有深入的去了解和使用，但由于最近在重构一个项目，而重构所用到的框架就是yaf框架，正好趁此机会好好地使用了下yaf框架。本篇文章其实主要给一个yaf的例子,就是扩展了下yaf，因为yaf的东西本身就简单，所以快。鸟哥也给了两个例子，[laruence/yaf-examples](https://github.com/laruence/yaf-examples),一个是在yaf里使用Smarty的例子，还有一个是在yaf里加了DB和Log操作的包的例子。我给的yaf例子地址是：[https://github.com/jsyzchen/yaf-example](https://github.com/jsyzchen/yaf-example)
 
 # 配置
 首先，你得安装yaf,文档里有，[http://php.net/manual/zh/yaf.installation.php](http://php.net/manual/zh/yaf.installation.php) 。
@@ -11,7 +11,7 @@ extension=yaf.so
 yaf.use_namespace=1 ;开启命名空间
 yaf.use_spl_autoload=1 ;开启自动加载
 ```
-[chen-yaf](https://github.com/jsyzchen/chen-yaf)主要添加了:   
+主要添加了:   
 * [Eloquent ORM](https://github.com/illuminate/database)  
 * [Twig](http://twig.sensiolabs.org)  
 * 罗飞的[SocketLog](https://github.com/luofei614/SocketLog)   
@@ -196,7 +196,7 @@ public function _initLogger(\Yaf\Dispatcher $dispatcher)
 然后就可以在Chrome里调试你的代码了。
 
 # 其他
-[chen-yaf](https://github.com/jsyzchen/chen-yaf)引入了一些函数，放在library/Common/functions.php里了，都是一些常用的函数，如果你的项目中有其他的函数往里面加就行了。编辑Bootstrap.php,添加_initFunction方法。
+引入了一些函数，放在library/Common/functions.php里了，都是一些常用的函数，如果你的项目中有其他的函数往里面加就行了。编辑Bootstrap.php,添加_initFunction方法。
 ```php
 /**
  * 公用函数载入
@@ -207,7 +207,7 @@ public function _initFunction()
 }
 ```
 # 总结
-[chen-yaf](https://github.com/jsyzchen/chen-yaf)只是一个很简单的yaf例子，加了Eloquent ORM和twig。实际项目中，还需要不断地往里面添加东西。既然我们使用了composer包，那么我们在做自己的项目时就可以很方便的使用第三方包，避免我们重复造轮子。
+只是一个很简单的yaf例子，加了Eloquent ORM和twig。实际项目中，还需要不断地往里面添加东西。既然我们使用了composer包，那么我们在做自己的项目时就可以很方便的使用第三方包，避免我们重复造轮子。
 推荐一些第三方包吧，也是我们在重构项目里所用到的。  
 1.[carbon](https://github.com/briannesbitt/Carbon):对于时间日期的操作。  
 2.[php-resque](https://github.com/chrisboulton/php-resque):队列的操作。  
