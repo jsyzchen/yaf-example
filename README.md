@@ -73,7 +73,7 @@ database.strict = false
 ```
 database为MySql数据库的配置,socketlog为socketlog的配置，twig为twig模板引擎的配置
 
-因为chen-yaf使用的是composer包，首先你得[安装composer](http://docs.phpcomposer.com/00-intro.html),然后在项目目录下建一个composer.json文件，内容如下：
+因为使用的是composer包，首先你得[安装composer](http://docs.phpcomposer.com/00-intro.html),然后在项目目录下建一个composer.json文件，内容如下：
 ```javascript
 {
     "require": {
@@ -119,7 +119,7 @@ public function _initConfig()
 # Eloquent ORM
 > [Eloquent ORM](https://github.com/illuminate/database)是Laravel框架里的ORM。  
 
-yaf里是没有数据库操作类的，可以自己写一个DAO层，或者直接使用第三方包，推荐[Medoo](https://github.com/catfan/Medoo)和[Eloquent ORM](https://github.com/illuminate/database),chen-yaf里面是使用的[Eloquent ORM](https://github.com/illuminate/database)。
+yaf里是没有数据库操作类的，可以自己写一个DAO层，或者直接使用第三方包，推荐[Medoo](https://github.com/catfan/Medoo)和[Eloquent ORM](https://github.com/illuminate/database),这里是使用的[Eloquent ORM](https://github.com/illuminate/database)。
 编辑Bootstrap.php文件，添加_initDefaultDbAdapter方法
 ```php
 /**
