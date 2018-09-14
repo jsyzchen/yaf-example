@@ -1,7 +1,7 @@
-# chen-yaf
+# yaf-example
 >[yaf](https://github.com/laruence/yaf)是鸟哥用C语言编写的一个PHP框架，yaf文档地址：[http://yaf.laruence.com/manual/](http://yaf.laruence.com/manual/)
 
-其实很早之前就接触yaf了,但只是学习学习，没有深入的去了解和使用，但由于最近在重构一个项目，而重构所用到的框架就是yaf框架，正好趁此机会好好地使用了下yaf框架。本篇文章其实主要给一个yaf的例子,就是扩展了下yaf，因为yaf的东西本身就简单，所以快。鸟哥也给了两个例子，[laruence/yaf-examples](https://github.com/laruence/yaf-examples),一个是在yaf里使用Smarty的例子，还有一个是在yaf里加了DB和Log操作的包的例子。我给的yaf例子地址是：[https://github.com/jsyzchen/yaf-example](https://github.com/jsyzchen/yaf-example)
+其实很早之前就接触yaf了,但只是学习学习，没有深入的去了解和使用，但由于最近在重构一个项目，而重构所用到的框架就是yaf框架，正好趁此机会好好地使用了下yaf框架。本篇文章其实主要给一个yaf的例子,就是扩展了下yaf，因为yaf的东西本身就简单，所以快。鸟哥也给了两个例子，[laruence/yaf-examples](https://github.com/laruence/yaf-examples),一个是在yaf里使用Smarty的例子，还有一个是在yaf里加了DB和Log操作的包的例子。
 
 # 配置
 首先，你得安装yaf,文档里有，[http://php.net/manual/zh/yaf.installation.php](http://php.net/manual/zh/yaf.installation.php) 。
